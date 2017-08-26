@@ -13,6 +13,8 @@
 		4BBDC6E91F50C29000C5216D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BBDC6E71F50C29000C5216D /* LaunchScreen.storyboard */; };
 		4BBDC6F11F50C32900C5216D /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBDC6F01F50C32900C5216D /* ActivityViewController.swift */; };
 		4BBDC6F31F50FAD600C5216D /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBDC6F21F50FAD600C5216D /* HomeViewController.swift */; };
+		4BBDC6F51F51DBF600C5216D /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBDC6F41F51DBF600C5216D /* RegisterViewController.swift */; };
+		4BBDC6F91F51E64700C5216D /* UIColor+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBDC6F81F51E64700C5216D /* UIColor+hex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		4BBDC6EA1F50C29000C5216D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4BBDC6F01F50C32900C5216D /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		4BBDC6F21F50FAD600C5216D /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		4BBDC6F41F51DBF600C5216D /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		4BBDC6F81F51E64700C5216D /* UIColor+hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+hex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,8 @@
 				4BBDC6E71F50C29000C5216D /* LaunchScreen.storyboard */,
 				4BBDC6EA1F50C29000C5216D /* Info.plist */,
 				4BBDC6F21F50FAD600C5216D /* HomeViewController.swift */,
+				4BBDC6F41F51DBF600C5216D /* RegisterViewController.swift */,
+				4BBDC6F81F51E64700C5216D /* UIColor+hex.swift */,
 			);
 			path = ActivityMonitor;
 			sourceTree = "<group>";
@@ -142,7 +148,9 @@
 			files = (
 				4BBDC6F11F50C32900C5216D /* ActivityViewController.swift in Sources */,
 				4BBDC6DF1F50C29000C5216D /* AppDelegate.swift in Sources */,
+				4BBDC6F91F51E64700C5216D /* UIColor+hex.swift in Sources */,
 				4BBDC6F31F50FAD600C5216D /* HomeViewController.swift in Sources */,
+				4BBDC6F51F51DBF600C5216D /* RegisterViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

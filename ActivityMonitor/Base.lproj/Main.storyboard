@@ -9,6 +9,24 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Register View Controller-->
+        <scene sceneID="QKI-ya-7DC">
+            <objects>
+                <viewController id="yH9-M2-FNe" customClass="RegisterViewController" customModule="ActivityMonitor" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="a4D-E8-JPc"/>
+                        <viewControllerLayoutGuide type="bottom" id="BTR-Nu-h1r"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7RP-WS-0mw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ee3-GF-aog" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1054" y="139"/>
+        </scene>
         <!--Recent Data-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -46,7 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1076" y="138.98050974512745"/>
+            <point key="canvasLocation" x="1772" y="139"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="jeY-YY-4fX">
@@ -60,14 +78,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Username" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oGA-4Q-90t">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oGA-4Q-90t">
                                 <rect key="frame" x="83" y="257" width="208" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Password" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xjd-DI-p8I">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xjd-DI-p8I">
                                 <rect key="frame" x="83" y="306" width="208" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
@@ -75,15 +93,36 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WbN-Ev-HW1">
-                                <rect key="frame" x="152" y="360" width="71" height="13"/>
+                                <rect key="frame" x="83" y="357" width="208" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Login"/>
+                                <state key="normal" title="Login">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
                                 <connections>
                                     <action selector="LoginButton:" destination="Fx4-Bk-plp" eventType="touchUpInside" id="DqR-W9-RXU"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Pf-gm-xMS">
+                                <rect key="frame" x="83" y="393" width="95" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <state key="normal" title="Forgot Password">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ttp-9v-eib">
+                                <rect key="frame" x="193" y="393" width="98" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <state key="normal" title="Open an Account">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="10"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <connections>
                         <outlet property="_login_button" destination="WbN-Ev-HW1" id="qYO-3s-o09"/>
@@ -93,7 +132,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rix-cF-ShB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="345" y="139"/>
+            <point key="canvasLocation" x="344.80000000000001" y="138.98050974512745"/>
         </scene>
     </scenes>
 </document>

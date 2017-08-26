@@ -13,11 +13,18 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var _username: UITextField!
     @IBOutlet weak var _password: UITextField!
     @IBOutlet weak var _login_button: UIButton!
-//    @IBOutlet weak var _register_button: UIButton!
+    
+    override func loadView() {
+        super.loadView()
+        _login_button.backgroundColor = UIColor(hex: "27B4FF")
+        _login_button.layer.cornerRadius = 10;
+        _login_button.clipsToBounds = true;
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let preferences = UserDefaults.standard
         
         if (preferences.object(forKey: "session") != nil)
@@ -57,13 +64,9 @@ class HomeViewController: UIViewController {
         
         DoLogin(username!, password!)
     }
-
-//    @IBAction func RegisterButton(_ sender: Any) {
-//        return
-//    }
     
     func DoLogin(_ user:String, _ psw:String) {
-        let url = URL(string: "http://127.0.0.1:5000/")
+        let url = URL(string: "http://127.0.0.1:5000/login")
         let session = URLSession.shared
         
         let request = NSMutableURLRequest(url: url!)
