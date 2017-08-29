@@ -20,6 +20,8 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var signInSelector: UISegmentedControl!
     
+    var ref: FIRDatabaseReference?
+    
     var isSignIn:Bool = true
     
     override func loadView() {
@@ -32,6 +34,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        ref = FIRDatabase.database().reference()
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,11 +73,21 @@ class HomeViewController: UIViewController {
                 FIRAuth.auth()?.createUser(withEmail: email, password: pass, completion: {
                     (user, error) in
                     if let u = user {
+                        if error != nil {
+                            print(error!.localizedDescription)
+                            return
+                        }
+                        let userReference = self.ref?.child("users")
+                        let uid = user?.uid
+                        let newUserReference = userReference?.child(uid!)
+                        newUserReference?.setValue(["email": self._username.text!])
+                        
                         //go to home screen
                         self.performSegue(withIdentifier: "goToData", sender: self)
                     }
                     else {
                         //error
+                        print("error")
                     }
                 })
             }
