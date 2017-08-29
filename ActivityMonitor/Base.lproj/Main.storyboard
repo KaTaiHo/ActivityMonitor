@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="jNk-2J-mvX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Fx4-Bk-plp">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--ActivityMonitor Beta-->
+        <!--Home View Controller-->
         <scene sceneID="jeY-YY-4fX">
             <objects>
                 <viewController id="Fx4-Bk-plp" customClass="HomeViewController" customModule="ActivityMonitor" customModuleProvider="target" sceneMemberID="viewController">
@@ -21,6 +21,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="uXw-LO-zri">
+                                <rect key="frame" x="113" y="28" width="148" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Sign In"/>
+                                    <segment title="Register"/>
+                                </segments>
+                                <connections>
+                                    <action selector="signInSelectorChanged:" destination="Fx4-Bk-plp" eventType="valueChanged" id="yJZ-Gy-kCd"/>
+                                </connections>
+                            </segmentedControl>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oGA-4Q-90t">
                                 <rect key="frame" x="83" y="257" width="208" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -61,24 +72,12 @@
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="uXw-LO-zri">
-                                <rect key="frame" x="113" y="93" width="148" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="Sign In"/>
-                                    <segment title="Register"/>
-                                </segments>
-                                <connections>
-                                    <action selector="signInSelectorChanged:" destination="Fx4-Bk-plp" eventType="valueChanged" id="yJZ-Gy-kCd"/>
-                                </connections>
-                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="10"/>
                         </userDefinedRuntimeAttributes>
                     </view>
-                    <navigationItem key="navigationItem" title="ActivityMonitor Beta" id="pDE-3K-r8N"/>
                     <connections>
                         <outlet property="_login_button" destination="WbN-Ev-HW1" id="qYO-3s-o09"/>
                         <outlet property="_password" destination="Xjd-DI-p8I" id="DnO-h9-Njl"/>
@@ -89,12 +88,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rix-cF-ShB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1092" y="138.98050974512745"/>
+            <point key="canvasLocation" x="154" y="139"/>
         </scene>
-        <!--View Controller-->
+        <!--Data View Controller-->
         <scene sceneID="ss4-jh-xvR">
             <objects>
-                <viewController id="7PB-y6-KI9" sceneMemberID="viewController">
+                <viewController id="7PB-y6-KI9" customClass="DataViewController" customModule="ActivityMonitor" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="iOn-vt-FPi"/>
                         <viewControllerLayoutGuide type="bottom" id="4co-vg-pOe"/>
@@ -103,46 +102,85 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7VF-bf-eeY">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="GlH-fh-ASn">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="n4I-iN-EKI">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="n4I-iN-EKI" id="dL2-ey-oPM">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
                             </tableView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mBu-zx-v5q">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <items>
+                                    <navigationItem title="Title" id="qCm-o3-BqI">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="X5p-PR-544">
+                                            <connections>
+                                                <segue destination="y4t-Ds-QX4" kind="presentation" id="lXD-Fl-bj3"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="GlH-fh-ASn" secondAttribute="trailing" id="1BH-No-38d"/>
+                            <constraint firstItem="mBu-zx-v5q" firstAttribute="top" secondItem="iOn-vt-FPi" secondAttribute="bottom" id="8eY-hN-SEL"/>
+                            <constraint firstItem="mBu-zx-v5q" firstAttribute="leading" secondItem="anJ-7S-30b" secondAttribute="leading" id="Gsl-OR-e0i"/>
+                            <constraint firstItem="4co-vg-pOe" firstAttribute="top" secondItem="GlH-fh-ASn" secondAttribute="bottom" id="Xhu-hm-IEB"/>
+                            <constraint firstItem="GlH-fh-ASn" firstAttribute="top" secondItem="mBu-zx-v5q" secondAttribute="bottom" id="bvw-c4-FVg"/>
+                            <constraint firstAttribute="trailing" secondItem="mBu-zx-v5q" secondAttribute="trailing" id="qir-9A-kne"/>
+                            <constraint firstItem="GlH-fh-ASn" firstAttribute="leading" secondItem="anJ-7S-30b" secondAttribute="leading" id="xhH-ho-wkl"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ccH-hg-Nmf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1863" y="140"/>
+            <point key="canvasLocation" x="842.39999999999998" y="138.98050974512745"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="Ti0-1M-cAP">
+        <!--Compose View Controller-->
+        <scene sceneID="7LR-BC-MxV">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jNk-2J-mvX" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="woo-8t-hjw">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
+                <viewController id="y4t-Ds-QX4" customClass="ComposeViewController" customModule="ActivityMonitor" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0xA-LC-WTm"/>
+                        <viewControllerLayoutGuide type="bottom" id="Kl0-qF-aIh"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="w60-BS-khw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G8M-kv-rCN">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <items>
+                                    <navigationItem title="Compose" id="aPY-nk-8XD">
+                                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="trash" id="eso-fu-chE"/>
+                                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="1H8-mu-jeO"/>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dfE-Fe-YZ5">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Kl0-qF-aIh" firstAttribute="top" secondItem="dfE-Fe-YZ5" secondAttribute="bottom" id="F4Z-VP-nuE"/>
+                            <constraint firstItem="G8M-kv-rCN" firstAttribute="top" secondItem="0xA-LC-WTm" secondAttribute="bottom" id="Que-5J-Fn0"/>
+                            <constraint firstAttribute="trailing" secondItem="G8M-kv-rCN" secondAttribute="trailing" id="Yyy-Ew-dC2"/>
+                            <constraint firstItem="dfE-Fe-YZ5" firstAttribute="leading" secondItem="w60-BS-khw" secondAttribute="leading" id="bcs-Qo-b2j"/>
+                            <constraint firstAttribute="trailing" secondItem="dfE-Fe-YZ5" secondAttribute="trailing" id="mwi-Ss-yLH"/>
+                            <constraint firstItem="G8M-kv-rCN" firstAttribute="leading" secondItem="w60-BS-khw" secondAttribute="leading" id="oOD-aF-E5T"/>
+                            <constraint firstItem="dfE-Fe-YZ5" firstAttribute="top" secondItem="G8M-kv-rCN" secondAttribute="bottom" id="oVz-KV-KS6"/>
+                        </constraints>
+                    </view>
                     <connections>
-                        <segue destination="Fx4-Bk-plp" kind="relationship" relationship="rootViewController" id="ER7-QO-QrM"/>
+                        <outlet property="textView" destination="dfE-Fe-YZ5" id="jAs-cS-RT6"/>
                     </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mGD-YA-bNZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="W8r-ob-EvK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="152.80000000000001" y="138.98050974512745"/>
+            <point key="canvasLocation" x="1527" y="139"/>
         </scene>
     </scenes>
 </document>

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		43AAD13528A9105EEC78C3FB /* Pods_ActivityMonitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82717B32CFEEC669E6B7F200 /* Pods_ActivityMonitor.framework */; };
 		4B531D871F55D5740064864A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B531D861F55D5740064864A /* GoogleService-Info.plist */; };
+		4BAE01961F55EFBA00FFB092 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BAE01951F55EFBA00FFB092 /* DataViewController.swift */; };
+		4BAE01981F55F50600FFB092 /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BAE01971F55F50600FFB092 /* ComposeViewController.swift */; };
 		4BBDC6DF1F50C29000C5216D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBDC6DE1F50C29000C5216D /* AppDelegate.swift */; };
 		4BBDC6E41F50C29000C5216D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BBDC6E21F50C29000C5216D /* Main.storyboard */; };
 		4BBDC6E61F50C29000C5216D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4BBDC6E51F50C29000C5216D /* Assets.xcassets */; };
@@ -19,6 +21,8 @@
 
 /* Begin PBXFileReference section */
 		4B531D861F55D5740064864A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4BAE01951F55EFBA00FFB092 /* DataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
+		4BAE01971F55F50600FFB092 /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
 		4BBDC6DB1F50C29000C5216D /* ActivityMonitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ActivityMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BBDC6DE1F50C29000C5216D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4BBDC6E31F50C29000C5216D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -81,6 +85,8 @@
 				4B531D861F55D5740064864A /* GoogleService-Info.plist */,
 				4BBDC6F21F50FAD600C5216D /* HomeViewController.swift */,
 				4BBDC6F81F51E64700C5216D /* UIColor+hex.swift */,
+				4BAE01951F55EFBA00FFB092 /* DataViewController.swift */,
+				4BAE01971F55F50600FFB092 /* ComposeViewController.swift */,
 			);
 			path = ActivityMonitor;
 			sourceTree = "<group>";
@@ -219,6 +225,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BAE01981F55F50600FFB092 /* ComposeViewController.swift in Sources */,
+				4BAE01961F55EFBA00FFB092 /* DataViewController.swift in Sources */,
 				4BBDC6DF1F50C29000C5216D /* AppDelegate.swift in Sources */,
 				4BBDC6F91F51E64700C5216D /* UIColor+hex.swift in Sources */,
 				4BBDC6F31F50FAD600C5216D /* HomeViewController.swift in Sources */,
