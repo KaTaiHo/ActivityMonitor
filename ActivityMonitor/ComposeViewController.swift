@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 class ComposeViewController: UIViewController {
 
@@ -30,7 +31,9 @@ class ComposeViewController: UIViewController {
     }
     
     @IBAction func addPost(_ sender: Any) {
-        ref?.child("Posts").childByAutoId().setValue(textView.text)
+//        ref?.child("Posts").childByAutoId().setValue(textView.text)
+        let userId = FIRAuth.auth()?.currentUser?.uid
+        self.ref?.child("users").child(userId!).child("Posts").childByAutoId().setValue(textView.text)
         
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
