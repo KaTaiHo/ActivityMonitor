@@ -44,6 +44,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
                 let message = restDict["message"] as? String
                 self.postData.insert(message!, at: 0)
             }
+            self.postData.remove(at: 0)
             self.tableView.reloadData()
         })
         
@@ -56,7 +57,14 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.tableView.reloadData()
         })
     }
+    
 
+    @IBAction func logout(_ sender: UIBarButtonItem) {
+        try! FIRAuth.auth()!.signOut()
+        presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
