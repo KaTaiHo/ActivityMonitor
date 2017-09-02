@@ -9,18 +9,22 @@
 import UIKit
 import FirebaseDatabase
 import FirebaseAuth
+import Speech
 
-class ComposeViewController: UIViewController {
+class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
 
     @IBOutlet weak var textView: UITextView!
     
     var ref: FIRDatabaseReference?
+    let audioEngine = AVAudioEngine()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         ref = FIRDatabase.database().reference()
+        
+        
 
         // Do any additional setup after loading the view.
     }
@@ -52,5 +56,10 @@ class ComposeViewController: UIViewController {
 
     @IBAction func cancelPost(_ sender: Any) {
         presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func speech(_ sender: Any) {
+        
     }
 }
