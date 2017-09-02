@@ -33,7 +33,19 @@ class ComposeViewController: UIViewController {
     @IBAction func addPost(_ sender: Any) {
 //        ref?.child("Posts").childByAutoId().setValue(textView.text)
         let userId = FIRAuth.auth()?.currentUser?.uid
-        self.ref?.child("users").child(userId!).child("Posts").childByAutoId().setValue(textView.text)
+        
+        var todaysDate:NSDate = NSDate()
+        var dateFormatter:DateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy"
+        let todayString:String = dateFormatter.string(from: todaysDate as Date)
+        
+        let date = Date()
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        
+        
+        self.ref?.child("users").child(userId!).child("Posts").childByAutoId().setValue(["message": textView.text, "date": todayString, "hour": hour, "minutes": minutes])
         
         presentingViewController?.dismiss(animated: true, completion: nil)
     }

@@ -80,7 +80,8 @@ class HomeViewController: UIViewController {
                         let userReference = self.ref?.child("users")
                         let uid = user?.uid
                         let newUserReference = userReference?.child(uid!)
-                        newUserReference?.setValue(["email": self._username.text!])
+                        let emptyString: [String] = []
+                        newUserReference?.setValue(["email": self._username.text!, "Posts": emptyString])
                         
                         //go to home screen
                         self.performSegue(withIdentifier: "goToData", sender: self)
