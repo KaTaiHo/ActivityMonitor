@@ -43,9 +43,7 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
             print("cannot find song")
         }
     }
-    
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = FIRDatabase.database().reference()
@@ -90,8 +88,8 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
 //        ref?.child("Posts").childByAutoId().setValue(textView.text)
         let userId = FIRAuth.auth()?.currentUser?.uid
         
-        var todaysDate:NSDate = NSDate()
-        var dateFormatter:DateFormatter = DateFormatter()
+        let todaysDate:NSDate = NSDate()
+        let dateFormatter:DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd-yyyy"
         let todayString:String = dateFormatter.string(from: todaysDate as Date)
         
@@ -109,6 +107,7 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
     }
 
     @IBAction func cancelPost(_ sender: Any) {
+        audioEngine.stop()
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
