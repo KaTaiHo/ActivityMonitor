@@ -10,11 +10,15 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 import Speech
+import AVFoundation
 
 class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
 
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var microphoneButton: UIButton!
+    
+    var player:AVAudioPlayer = AVAudioPlayer()
+    
     
     var ref: FIRDatabaseReference?
 
@@ -26,13 +30,29 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
     
     @IBAction func speechActivate(_ sender: Any) {
         startRecording()
+//        playSong()
     }
+    
+    func playSong() {
+        
+        do {
+            try player = AVAudioPlayer(contentsOf: URL.init(fileURLWithPath: Bundle.main.path(forResource: "logic", ofType: "mp3")!))
+            player.play()
+        }
+        catch {
+            print("cannot find song")
+        }
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = FIRDatabase.database().reference()
         
         microphoneButton.isEnabled = false
         speechRecognizer?.delegate = self
+        
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             var isButtonEnabled = false
             
@@ -119,9 +139,13 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
         
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(AVAudioSessionCategoryRecord)
-            try audioSession.setMode(AVAudioSessionModeMeasurement)
-            try audioSession.setActive(true, with: .notifyOthersOnDeactivation)
+//            try audioSession.setCategory(AVAudioSessionCategoryRecord)
+//            try audioSession.setMode(AVAudioSessionModeMeasurement)
+//            try audioSession.setActive(true, with: .notifyOthersOnDeactivation)
+            
+            try audioSession.setCategory(AVAudioSessionCategoryRecord, with: [.allowBluetooth])
+            try audioSession.setActive(true)
+
         } catch {
             print("audioSession properties weren't set because of an error.")
         }

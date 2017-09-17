@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ActivityMonitor/ComposeViewController.swift"
-            timestampString = "527223368.078164"
+            timestampString = "527305523.199595"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "addPost(_:)"
             landmarkType = "7">
          </BreakpointContent>
