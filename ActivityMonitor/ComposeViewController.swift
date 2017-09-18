@@ -18,7 +18,8 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
     @IBOutlet weak var microphoneButton: UIButton!
     
     var player:AVAudioPlayer = AVAudioPlayer()
-    
+    var synth:AVSpeechSynthesizer = AVSpeechSynthesizer()
+    var myUtterance = AVSpeechUtterance(string: "")
     
     var ref: FIRDatabaseReference?
 
@@ -26,7 +27,6 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
     private var recognitionTask: SFSpeechRecognitionTask?
     let audioEngine = AVAudioEngine()
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))
-    
     
     @IBAction func speechActivate(_ sender: Any) {
         startRecording()
@@ -74,7 +74,10 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
             }
         }
         
-        
+//        myUtterance.voice = 
+//        myUtterance = AVSpeechUtterance(string: "Hello Connie How are you?")
+//        myUtterance.rate = 0.4
+//        synth.speak(myUtterance)
 
         // Do any additional setup after loading the view.
     }
