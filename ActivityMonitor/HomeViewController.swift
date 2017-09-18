@@ -56,23 +56,19 @@ class HomeViewController: UIViewController {
         // TODO: form validation
         if let email = _username.text, let pass = _password.text {
             if isSignIn {
-                FIRAuth.auth()?.signIn(withEmail: email, password: pass,
-                                       completion: {(user, error) in
-                    if let u = user {
+                FIRAuth.auth()?.signIn(withEmail: email, password: pass, completion: {(user, error) in
+                    if user != nil {
                         self.performSegue(withIdentifier: "goToData", sender: self)
-                        
                     }
                     else {
-                        
+                        print("error trying to login")
                     }
-                    
                 })
-                
             }
             else {
                 FIRAuth.auth()?.createUser(withEmail: email, password: pass, completion: {
                     (user, error) in
-                    if let u = user {
+                    if user != nil {
                         if error != nil {
                             print(error!.localizedDescription)
                             return
@@ -88,7 +84,7 @@ class HomeViewController: UIViewController {
                     }
                     else {
                         //error
-                        print("error")
+                        print("error trying to register")
                     }
                 })
             }
