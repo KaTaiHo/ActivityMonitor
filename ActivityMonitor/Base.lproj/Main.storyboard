@@ -202,8 +202,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
-                                    <action selector="speech:" destination="y4t-Ds-QX4" eventType="touchUpInside" id="bqr-s0-JoT"/>
-                                    <action selector="speechActivate:" destination="y4t-Ds-QX4" eventType="touchUpInside" id="xnh-Ij-ksm"/>
+                                    <action selector="recordTouched:" destination="y4t-Ds-QX4" eventType="touchUpInside" id="pdn-L2-iWQ"/>
                                 </connections>
                             </button>
                         </subviews>

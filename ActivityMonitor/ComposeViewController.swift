@@ -28,11 +28,6 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
     let audioEngine = AVAudioEngine()
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))
     
-    @IBAction func speechActivate(_ sender: Any) {
-        startRecording()
-//        playSong()
-    }
-    
     func playSong() {
         
         do {
@@ -41,6 +36,60 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
         }
         catch {
             print("cannot find song")
+        }
+    }
+    
+    @IBAction func recordTouched(_ sender: Any) {
+        startRecording()
+    }
+    
+    func setupSessionForRecording() {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(AVAudioSessionCategoryRecord, with: [.allowBluetooth])
+        } catch {
+            fatalError("Error Setting Up Audio Session")
+        }
+        var inputsPriority: [(type: String, input: AVAudioSessionPortDescription?)] = [
+            (AVAudioSessionPortLineIn, nil),
+            (AVAudioSessionPortHeadsetMic, nil),
+            (AVAudioSessionPortBluetoothHFP, nil),
+            (AVAudioSessionPortUSBAudio, nil),
+            (AVAudioSessionPortCarAudio, nil),
+            (AVAudioSessionPortBuiltInMic, nil),
+            ]
+        for availableInput in audioSession.availableInputs! {
+            guard let index = inputsPriority.index(where: { $0.type == availableInput.portType }) else { continue }
+            inputsPriority[index].input = availableInput
+        }
+        guard let input = inputsPriority.filter({ $0.input != nil }).first?.input else {
+            fatalError("No Available Ports For Recording")
+        }
+        do {
+            try audioSession.setPreferredInput(input)
+            try audioSession.setActive(true)
+        } catch {
+            fatalError("Error Setting Up Audio Session")
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let userId = FIRAuth.auth()?.currentUser?.uid
+        var prefname = " "
+        
+        ref?.child("users").child(userId!).observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
+            prefname = value?["prefname"] as? String ?? ""
+            self.myUtterance = AVSpeechUtterance(string: "Hello " + prefname + "What are you doing right now?")
+            self.myUtterance.rate = 0.35
+            self.synth.speak(self.myUtterance)
+            
+        })
+        { (error) in
+            print(error.localizedDescription)
         }
     }
 
@@ -72,21 +121,6 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
             OperationQueue.main.addOperation() {
                 self.microphoneButton.isEnabled = isButtonEnabled
             }
-        }
-        
-        let userId = FIRAuth.auth()?.currentUser?.uid
-        var prefname = " "
-        
-        ref?.child("users").child(userId!).observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            let value = snapshot.value as? NSDictionary
-            prefname = value?["prefname"] as? String ?? ""
-            self.myUtterance = AVSpeechUtterance(string: "Hello " + prefname + "What are you doing right now?")
-            self.myUtterance.rate = 0.35
-            self.synth.speak(self.myUtterance)
-            
-        }) { (error) in
-            print(error.localizedDescription)
         }
     }
 
@@ -141,15 +175,15 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
             recognitionTask = nil
         }
         
-        let audioSession = AVAudioSession.sharedInstance()
+//        let audioSession = AVAudioSession.sharedInstance()
         do {
             
 //            try audioSession.setCategory(AVAudioSessionCategoryRecord)
 //            try audioSession.setMode(AVAudioSessionModeMeasurement)
 //            try audioSession.setActive(true, with: .notifyOthersOnDeactivation)
-            
-            try audioSession.setCategory(AVAudioSessionCategoryRecord, with: [.allowBluetooth])
-            try audioSession.setActive(true)
+            setupSessionForRecording()
+//            try audioSession.setCategory(AVAudioSessionCategoryRecord, with: [.allowBluetooth])
+//            try audioSession.setActive(true)
 
         } catch {
             print("audioSession properties weren't set because of an error.")
