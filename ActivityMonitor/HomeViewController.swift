@@ -13,11 +13,9 @@ import FirebaseDatabase
 class HomeViewController: UIViewController {
 
     @IBOutlet weak var _username: UITextField!
-    
     @IBOutlet weak var _password: UITextField!
-    
+    @IBOutlet weak var _prefname: UITextField!
     @IBOutlet weak var _login_button: UIButton!
-    
     @IBOutlet weak var signInSelector: UISegmentedControl!
     
     var ref: FIRDatabaseReference?
@@ -29,6 +27,7 @@ class HomeViewController: UIViewController {
         _login_button.backgroundColor = UIColor(hex: "27B4FF")
         _login_button.layer.cornerRadius = 10;
         _login_button.clipsToBounds = true;
+        _prefname.isHidden = true
     }
     
     
@@ -45,9 +44,11 @@ class HomeViewController: UIViewController {
         isSignIn = !isSignIn
         
         if isSignIn {
+            _prefname.isHidden = true
             _login_button.setTitle("Sign In", for: .normal)
         }
         else {
+            _prefname.isHidden = false
             _login_button.setTitle("Register", for: .normal)
         }
     }
@@ -66,27 +67,29 @@ class HomeViewController: UIViewController {
                 })
             }
             else {
-                FIRAuth.auth()?.createUser(withEmail: email, password: pass, completion: {
-                    (user, error) in
-                    if user != nil {
-                        if error != nil {
-                            print(error!.localizedDescription)
-                            return
+                if let prefnameText = _prefname.text?.trimmingCharacters(in: .whitespacesAndNewlines), _prefname.hasText {
+                    FIRAuth.auth()?.createUser(withEmail: email, password: pass, completion: {
+                        (user, error) in
+                        if user != nil {
+                            if error != nil {
+                                print(error!.localizedDescription)
+                                return
+                            }
+                            let userReference = self.ref?.child("users")
+                            let uid = user?.uid
+                            let newUserReference = userReference?.child(uid!)
+                            let emptyString: [String] = []
+                            newUserReference?.setValue(["email": self._username.text!, "Posts": emptyString, "prefname": prefnameText])
+                            
+                            //go to home screen
+                            self.performSegue(withIdentifier: "goToData", sender: self)
                         }
-                        let userReference = self.ref?.child("users")
-                        let uid = user?.uid
-                        let newUserReference = userReference?.child(uid!)
-                        let emptyString: [String] = []
-                        newUserReference?.setValue(["email": self._username.text!, "Posts": emptyString])
-                        
-                        //go to home screen
-                        self.performSegue(withIdentifier: "goToData", sender: self)
-                    }
-                    else {
-                        //error
-                        print("error trying to register")
-                    }
-                })
+                        else {
+                            //error
+                            print("error trying to register")
+                        }
+                    })
+                }
             }
         }
     }

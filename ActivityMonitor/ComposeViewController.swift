@@ -55,31 +55,39 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
             var isButtonEnabled = false
             
             switch authStatus {
+                
             case .authorized:
                 isButtonEnabled = true
             case .denied:
                 isButtonEnabled = false
                 print("User denied access to speech recognition")
-                
             case .restricted:
                 isButtonEnabled = false
                 print("Speech recognition restricted on this device")
-                
             case .notDetermined:
                 isButtonEnabled = false
                 print("Speech recognition not yet authorized")
             }
+            
             OperationQueue.main.addOperation() {
                 self.microphoneButton.isEnabled = isButtonEnabled
             }
         }
         
-//        myUtterance.voice = 
-//        myUtterance = AVSpeechUtterance(string: "Hello Connie How are you?")
-//        myUtterance.rate = 0.4
-//        synth.speak(myUtterance)
-
-        // Do any additional setup after loading the view.
+        let userId = FIRAuth.auth()?.currentUser?.uid
+        var prefname = " "
+        
+        ref?.child("users").child(userId!).observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
+            prefname = value?["prefname"] as? String ?? ""
+            self.myUtterance = AVSpeechUtterance(string: "Hello " + prefname + "What are you doing right now?")
+            self.myUtterance.rate = 0.35
+            self.synth.speak(self.myUtterance)
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -114,11 +122,6 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
-    
-    @IBAction func speech(_ sender: Any) {
-        
-    }
-    
     @IBAction func microphoneTapped(_ sender: AnyObject) {
         if audioEngine.isRunning {
             audioEngine.stop()
@@ -129,7 +132,6 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
             startRecording()
             microphoneButton.setTitle("Stop Recording", for: .normal)
         }
-        
     }
     
     func startRecording() {
@@ -141,6 +143,7 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
         
         let audioSession = AVAudioSession.sharedInstance()
         do {
+            
 //            try audioSession.setCategory(AVAudioSessionCategoryRecord)
 //            try audioSession.setMode(AVAudioSessionModeMeasurement)
 //            try audioSession.setActive(true, with: .notifyOthersOnDeactivation)
