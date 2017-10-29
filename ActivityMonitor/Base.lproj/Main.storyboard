@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Fx4-Bk-plp">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Fx4-Bk-plp">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -174,8 +174,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G8M-kv-rCN">
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G8M-kv-rCN">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Add Data" id="aPY-nk-8XD">
                                         <barButtonItem key="leftBarButtonItem" style="plain" systemItem="trash" id="eso-fu-chE">
@@ -191,34 +192,43 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dfE-Fe-YZ5">
-                                <rect key="frame" x="0.0" y="64" width="375" height="491"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dfE-Fe-YZ5">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gd0-Zh-bdV">
-                                <rect key="frame" x="101" y="586" width="173" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ayu-5T-lcn">
+                                <rect key="frame" x="56" y="480" width="264" height="55"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <color key="backgroundColor" red="0.34884697129999998" green="0.72445598820000001" blue="0.06141197894" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Start Session">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
-                                    <action selector="recordTouched:" destination="y4t-Ds-QX4" eventType="touchUpInside" id="pdn-L2-iWQ"/>
+                                    <action selector="startSession:" destination="y4t-Ds-QX4" eventType="touchUpInside" id="Jue-Ai-vkg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TUR-F2-VNe">
+                                <rect key="frame" x="56" y="564" width="264" height="55"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.72445598820000001" green="0.2533718546" blue="0.2161998494" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Pause Session">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="pauseSession:" destination="y4t-Ds-QX4" eventType="touchUpInside" id="PdL-xQ-HLl"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Kl0-qF-aIh" firstAttribute="top" secondItem="dfE-Fe-YZ5" secondAttribute="bottom" id="F4Z-VP-nuE"/>
-                            <constraint firstItem="G8M-kv-rCN" firstAttribute="top" secondItem="0xA-LC-WTm" secondAttribute="bottom" id="Que-5J-Fn0"/>
-                            <constraint firstAttribute="trailing" secondItem="G8M-kv-rCN" secondAttribute="trailing" id="Yyy-Ew-dC2"/>
-                            <constraint firstItem="dfE-Fe-YZ5" firstAttribute="leading" secondItem="w60-BS-khw" secondAttribute="leading" id="bcs-Qo-b2j"/>
-                            <constraint firstAttribute="trailing" secondItem="dfE-Fe-YZ5" secondAttribute="trailing" id="mwi-Ss-yLH"/>
-                            <constraint firstItem="G8M-kv-rCN" firstAttribute="leading" secondItem="w60-BS-khw" secondAttribute="leading" id="oOD-aF-E5T"/>
-                            <constraint firstItem="dfE-Fe-YZ5" firstAttribute="top" secondItem="G8M-kv-rCN" secondAttribute="bottom" id="oVz-KV-KS6"/>
-                        </constraints>
                     </view>
                     <connections>
-                        <outlet property="microphoneButton" destination="gd0-Zh-bdV" id="akg-Fi-ejl"/>
+                        <outlet property="pauseButton" destination="TUR-F2-VNe" id="9TY-0i-ylr"/>
+                        <outlet property="startButton" destination="Ayu-5T-lcn" id="km5-2e-0lN"/>
                         <outlet property="textView" destination="dfE-Fe-YZ5" id="jAs-cS-RT6"/>
                     </connections>
                 </viewController>

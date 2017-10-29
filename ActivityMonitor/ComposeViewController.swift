@@ -11,42 +11,71 @@ import FirebaseDatabase
 import FirebaseAuth
 import Speech
 import AVFoundation
+import UserNotifications
 
-class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
+class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUserNotificationCenterDelegate{
 
     @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var microphoneButton: UIButton!
+    @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var pauseButton: UIButton!
     
-    var player:AVAudioPlayer = AVAudioPlayer()
-    var synth:AVSpeechSynthesizer = AVSpeechSynthesizer()
-    var myUtterance = AVSpeechUtterance(string: "")
+    var userVoiceInput = ""
+    var backgroundTask = BackgroundTask()
+    var textToSpeechTimerBackground = Timer()
+    var recordTimerBackground = Timer()
+    var recordTimer = Timer()
     
+    var userId: String?
     var ref: FIRDatabaseReference?
 
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
-    let audioEngine = AVAudioEngine()
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))
     
-    func playSong() {
-        
-        do {
-            try player = AVAudioPlayer(contentsOf: URL.init(fileURLWithPath: Bundle.main.path(forResource: "logic", ofType: "mp3")!))
-            player.play()
-        }
-        catch {
-            print("cannot find song")
+    var audioEngine = AVAudioEngine()
+    
+    func initNotificationSetupCheck() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert])
+        { (success, error) in
+            if success {
+                print("Permission Granted")
+            } else {
+                print("There was a problem!")
+            }
         }
     }
     
-    @IBAction func recordTouched(_ sender: Any) {
-        startRecording()
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .badge, .sound])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        completionHandler()
+    }
+    
+    func sendNotification() {
+        let options: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(options: options, completionHandler: { (success, error) in
+            // handle error
+        })
+        
+        let notification = UNMutableNotificationContent()
+        notification.title = "Activity Monitor"
+        notification.subtitle = "Collecting data"
+        notification.body = "What are you currently doing right now?"
+        
+        let notificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let request = UNNotificationRequest(identifier: "notification1", content: notification, trigger: notificationTrigger)
+        
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: { error in
+            // handle error
+        })
     }
     
     func setupSessionForRecording() {
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(AVAudioSessionCategoryRecord, with: [.allowBluetooth])
+            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord, with: [.allowBluetooth])
         } catch {
             fatalError("Error Setting Up Audio Session")
         }
@@ -68,7 +97,8 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
         do {
             try audioSession.setPreferredInput(input)
             try audioSession.setActive(true)
-        } catch {
+        }
+        catch {
             fatalError("Error Setting Up Audio Session")
         }
     }
@@ -76,35 +106,21 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let userId = FIRAuth.auth()?.currentUser?.uid
-        var prefname = " "
-        
-        ref?.child("users").child(userId!).observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            let value = snapshot.value as? NSDictionary
-            prefname = value?["prefname"] as? String ?? ""
-            self.myUtterance = AVSpeechUtterance(string: "Hello " + prefname + "What are you doing right now?")
-            self.myUtterance.rate = 0.35
-            self.synth.speak(self.myUtterance)
-            
-        })
-        { (error) in
-            print(error.localizedDescription)
-        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = FIRDatabase.database().reference()
+        userId = FIRAuth.auth()?.currentUser?.uid
         
-        microphoneButton.isEnabled = false
+        UNUserNotificationCenter.current().delegate = self
+        
         speechRecognizer?.delegate = self
         
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             var isButtonEnabled = false
             
             switch authStatus {
-                
             case .authorized:
                 isButtonEnabled = true
             case .denied:
@@ -117,22 +133,10 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
                 isButtonEnabled = false
                 print("Speech recognition not yet authorized")
             }
-            
-            OperationQueue.main.addOperation() {
-                self.microphoneButton.isEnabled = isButtonEnabled
-            }
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-    @IBAction func addPost(_ sender: Any) {
-//        ref?.child("Posts").childByAutoId().setValue(textView.text)
-        let userId = FIRAuth.auth()?.currentUser?.uid
-        
+    func addPostFunc () {
         let todaysDate:NSDate = NSDate()
         let dateFormatter:DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd-yyyy"
@@ -146,9 +150,9 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
         let idReference = self.ref?.child("users").child(userId!).child("Posts").childByAutoId()
         let stringReferenceArr = String(describing: idReference!).components(separatedBy: "/")
         let stringReference = stringReferenceArr[stringReferenceArr.count - 1]
-        idReference!.setValue(["message": textView.text, "date": todayString, "hour": hour, "minutes": minutes, "reference" : stringReference])
-        
-        presentingViewController?.dismiss(animated: true, completion: nil)
+        idReference!.setValue(["message": self.userVoiceInput, "date": todayString, "hour": hour, "minutes": minutes, "reference" : stringReference])
+
+//        presentingViewController?.dismiss(animated: true, completion: nil)
     }
 
     @IBAction func cancelPost(_ sender: Any) {
@@ -156,39 +160,15 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func microphoneTapped(_ sender: AnyObject) {
-        if audioEngine.isRunning {
-            audioEngine.stop()
-            recognitionRequest?.endAudio()
-            microphoneButton.isEnabled = false
-            microphoneButton.setTitle("Start Recording", for: .normal)
-        } else {
-            startRecording()
-            microphoneButton.setTitle("Stop Recording", for: .normal)
-        }
-    }
-    
     func startRecording() {
+        print("starting to record the user")
         
         if recognitionTask != nil {
             recognitionTask?.cancel()
             recognitionTask = nil
         }
         
-//        let audioSession = AVAudioSession.sharedInstance()
-        do {
-            
-//            try audioSession.setCategory(AVAudioSessionCategoryRecord)
-//            try audioSession.setMode(AVAudioSessionModeMeasurement)
-//            try audioSession.setActive(true, with: .notifyOthersOnDeactivation)
-            setupSessionForRecording()
-//            try audioSession.setCategory(AVAudioSessionCategoryRecord, with: [.allowBluetooth])
-//            try audioSession.setActive(true)
-
-        } catch {
-            print("audioSession properties weren't set because of an error.")
-        }
-        
+        setupSessionForRecording()
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         
         guard let inputNode = audioEngine.inputNode else {
@@ -199,6 +179,7 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
             fatalError("Unable to create an SFSpeechAudioBufferRecognitionRequest object")
         }
         
+        textView.text = "Say something, I'm listening!"
         recognitionRequest.shouldReportPartialResults = true
         
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
@@ -206,23 +187,44 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
             var isFinal = false
             
             if result != nil {
-                
-                self.textView.text = result?.bestTranscription.formattedString
+                self.userVoiceInput = (result?.bestTranscription.formattedString)!
+                self.textView.text = self.userVoiceInput
                 isFinal = (result?.isFinal)!
             }
             
             if error != nil || isFinal {
                 self.audioEngine.stop()
-                inputNode.removeTap(onBus: 0)
+                self.recognitionRequest?.endAudio()
+                self.audioEngine.inputNode?.removeTap(onBus: 0)
                 
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
-                
-                self.microphoneButton.isEnabled = true
+                self.recordTimer.invalidate()
+                self.addPostFunc()
+                print("done recording")
+                if let error = error {
+                     print("There was an error: \(error)")
+                }
+            }
+            else {
+                self.recordTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: {
+                    (recordTimer) in
+                    print("in recording mode")
+                    isFinal = true
+                    
+                    self.audioEngine.stop()
+                    self.recognitionRequest?.endAudio()
+                    self.audioEngine.inputNode?.removeTap(onBus: 0)
+
+                    self.recognitionRequest = nil
+                    self.recognitionTask = nil
+                    self.recordTimer.invalidate()
+                })
             }
         })
         
         let recordingFormat = inputNode.outputFormat(forBus: 0)
+        
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
             self.recognitionRequest?.append(buffer)
         }
@@ -234,16 +236,45 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate{
         } catch {
             print("audioEngine couldn't start because of an error.")
         }
-        
-        textView.text = "Say something, I'm listening!"
-        
     }
     
-    func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {
-        if available {
-            microphoneButton.isEnabled = true
-        } else {
-            microphoneButton.isEnabled = false
-        }
+    func pollUser(){
+        print("Just asked the user something")
+        self.playAudio()
+//        self.startRecording()
+    }
+    
+    func playAudio() {
+        let myUtterance = AVSpeechUtterance(string: "Hello, What are you doing right now?")
+        let synth = AVSpeechSynthesizer()
+        myUtterance.rate = 0.5
+        synth.speak(myUtterance)
+        
+        print("done asking the user how they are doing")
+    }
+    
+    @IBAction func startSession(_ sender: Any) {
+        backgroundTask.startBackgroundTask()
+        
+        textToSpeechTimerBackground = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.pollUser), userInfo: nil, repeats: true)
+        recordTimerBackground = Timer.scheduledTimer(timeInterval: 24, target: self, selector: #selector(self.startRecording), userInfo: nil, repeats: true)
+        
+        startButton.alpha = 0.5
+        startButton.isUserInteractionEnabled = false
+        
+        pauseButton.alpha = 1
+        pauseButton.isUserInteractionEnabled = true
+    }
+    
+    @IBAction func pauseSession(_ sender: Any) {
+        startButton.alpha = 1
+        startButton.isUserInteractionEnabled = true
+        pauseButton.alpha = 0.5
+        pauseButton.isUserInteractionEnabled = false
+        
+        textToSpeechTimerBackground.invalidate()
+        recordTimerBackground.invalidate()
+    
+        backgroundTask.stopBackgroundTask()
     }
 }
