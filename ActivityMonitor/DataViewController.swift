@@ -60,13 +60,13 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         ref?.child("users").child(userId!).child("Posts").queryLimited(toLast: 1)
             .observe(.childAdded, with: { snapshot in
                 guard let temp = snapshot.value as? [String: Any] else { return }
-                
+
                 let message = temp["message"] as? String
                 let referenceStr = temp["reference"] as? String
-                
+
                 self.postData.insert(message!, at: 0)
                 self.referenceArr.insert(referenceStr!, at: 0)
-                
+
                 print(snapshot.value!)
                 self.tableView.reloadData()
         })

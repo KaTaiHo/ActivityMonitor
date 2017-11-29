@@ -76,6 +76,7 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord, with: [.allowBluetooth])
+            //AVAudioSessionCategoryPlayAndRecord,
         } catch {
             fatalError("Error Setting Up Audio Session")
         }
@@ -116,6 +117,8 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
         UNUserNotificationCenter.current().delegate = self
         
         speechRecognizer?.delegate = self
+        
+        setupSessionForRecording()
         
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             var isButtonEnabled = false
@@ -163,6 +166,11 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
     func startRecording() {
         print("starting to record the user")
         
+        if audioEngine.isRunning {
+            audioEngine.stop()
+            recognitionRequest?.endAudio()
+        }
+        
         if recognitionTask != nil {
             recognitionTask?.cancel()
             recognitionTask = nil
@@ -179,7 +187,7 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
             fatalError("Unable to create an SFSpeechAudioBufferRecognitionRequest object")
         }
         
-        textView.text = "Say something, I'm listening!"
+        self.textView.text = "Say something, I'm listening!"
         recognitionRequest.shouldReportPartialResults = true
         
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
@@ -194,12 +202,16 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
             
             if error != nil || isFinal {
                 self.audioEngine.stop()
-                self.recognitionRequest?.endAudio()
                 self.audioEngine.inputNode?.removeTap(onBus: 0)
                 
+                self.recognitionRequest?.endAudio()
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 self.recordTimer.invalidate()
+                
+                if self.userVoiceInput == "" {
+                    self.userVoiceInput = "no response"
+                }
                 self.addPostFunc()
                 print("done recording")
                 if let error = error {
@@ -207,15 +219,15 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
                 }
             }
             else {
-                self.recordTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: {
+                self.recordTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false, block: {
                     (recordTimer) in
                     print("in recording mode")
                     isFinal = true
                     
                     self.audioEngine.stop()
-                    self.recognitionRequest?.endAudio()
                     self.audioEngine.inputNode?.removeTap(onBus: 0)
-
+                    
+                    self.recognitionRequest?.endAudio()
                     self.recognitionRequest = nil
                     self.recognitionTask = nil
                     self.recordTimer.invalidate()
@@ -241,23 +253,31 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
     func pollUser(){
         print("Just asked the user something")
         self.playAudio()
-//        self.startRecording()
+        self.startRecording()
+        self.userVoiceInput = ""
     }
     
     func playAudio() {
+        self.audioEngine.inputNode?.removeTap(onBus: 0)
         let myUtterance = AVSpeechUtterance(string: "Hello, What are you doing right now?")
+        myUtterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         let synth = AVSpeechSynthesizer()
-        myUtterance.rate = 0.5
+        myUtterance.rate = 0.45
         synth.speak(myUtterance)
-        
         print("done asking the user how they are doing")
     }
     
     @IBAction func startSession(_ sender: Any) {
-        backgroundTask.startBackgroundTask()
+//        backgroundTask.startBackgroundTask()
+//        playAudio()
         
-        textToSpeechTimerBackground = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.pollUser), userInfo: nil, repeats: true)
-        recordTimerBackground = Timer.scheduledTimer(timeInterval: 24, target: self, selector: #selector(self.startRecording), userInfo: nil, repeats: true)
+        textToSpeechTimerBackground = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.pollUser), userInfo: nil, repeats: true)
+        
+//        recordTimerBackground = Timer.scheduledTimer(timeInterval: 21, target: self, selector: #selector(self.startRecording), userInfo: nil, repeats: true)
+//        for index in 0...10 {
+//            self.pollUser()
+//            sleep(20)
+//        }
         
         startButton.alpha = 0.5
         startButton.isUserInteractionEnabled = false
@@ -273,8 +293,7 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
         pauseButton.isUserInteractionEnabled = false
         
         textToSpeechTimerBackground.invalidate()
-        recordTimerBackground.invalidate()
-    
-        backgroundTask.stopBackgroundTask()
+//        recordTimerBackground.invalidate()
+//        backgroundTask.stopBackgroundTask()
     }
 }
