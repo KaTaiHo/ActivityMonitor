@@ -120,6 +120,8 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
         
         setupSessionForRecording()
         
+        textView.isUserInteractionEnabled = false;
+        
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             var isButtonEnabled = false
             
@@ -159,6 +161,11 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
     }
 
     @IBAction func cancelPost(_ sender: Any) {
+        startButton.alpha = 1
+        startButton.isUserInteractionEnabled = true
+        pauseButton.alpha = 0.5
+        pauseButton.isUserInteractionEnabled = false
+        textToSpeechTimerBackground.invalidate()
         audioEngine.stop()
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
@@ -190,8 +197,28 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
         self.textView.text = "Say something, I'm listening!"
         recognitionRequest.shouldReportPartialResults = true
         
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+            self.recognitionRequest?.append(buffer)
+            print("in this buffer thing")
+        }
+        
+        audioEngine.prepare()
+        
+        do {
+            try audioEngine.start()
+            var tempTimer = Timer.scheduledTimer(withTimeInterval: 6, repeats: false, block: { (timer) in
+                self.audioEngine.stop()
+                print("stopping engine after 6 seconds")
+                timer.invalidate()
+            })
+        } catch {
+            print("audioEngine couldn't start because of an error.")
+        }
+        
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
-            
+            print("in speech Task")
             var isFinal = false
             
             if result != nil {
@@ -234,27 +261,15 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
                 })
             }
         })
-        
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
-            self.recognitionRequest?.append(buffer)
-        }
-        
-        audioEngine.prepare()
-        
-        do {
-            try audioEngine.start()
-        } catch {
-            print("audioEngine couldn't start because of an error.")
-        }
     }
     
     func pollUser(){
         print("Just asked the user something")
         self.playAudio()
+        // do something to signify user input signify gesture for now just say not now
         self.startRecording()
         self.userVoiceInput = ""
+        print("waiting for next task")
     }
     
     func playAudio() {
@@ -271,7 +286,7 @@ class ComposeViewController: UIViewController, SFSpeechRecognizerDelegate, UNUse
 //        backgroundTask.startBackgroundTask()
 //        playAudio()
         
-        textToSpeechTimerBackground = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.pollUser), userInfo: nil, repeats: true)
+        textToSpeechTimerBackground = Timer.scheduledTimer(timeInterval: 40, target: self, selector: #selector(self.pollUser), userInfo: nil, repeats: true)
         
 //        recordTimerBackground = Timer.scheduledTimer(timeInterval: 21, target: self, selector: #selector(self.startRecording), userInfo: nil, repeats: true)
 //        for index in 0...10 {
