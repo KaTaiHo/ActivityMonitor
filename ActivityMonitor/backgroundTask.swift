@@ -40,9 +40,9 @@ class BackgroundTask {
             try AVAudioSession.sharedInstance().setActive(true)
             try self.player = AVAudioPlayer(contentsOf: alertSound)
             self.player.numberOfLoops = -1
-            self.player.volume = 0.001
+            self.player.volume = 0.00001
             self.player.prepareToPlay()
             self.player.play()
-        } catch { print(error) }
+        } catch { print("error in backgroundTask" + error.localizedDescription) }
     }
 }
